@@ -1,0 +1,17 @@
+from index.structure import *
+t1 = TermOccurrence(1,1,2)
+t2 = TermOccurrence(3,1,2)
+t3 = TermOccurrence(1,2,2)
+t4 = TermOccurrence(2,2,2)
+t5 = TermOccurrence(2,2,2)
+
+print(f"Resultado obtido: {t4 == t5} - esperado: True")
+print(f"Resultado obtido: {t1 == t5} - esperado: False")
+print(f"Resultado obtido: {t1 != t1} - esperado: False")
+print(f"Resultado obtido: {t1 is None} - esperado: False")
+print("less")
+print(f"Resultado obtido: {t1 < t2} - esperado: True")
+print(f"Resultado obtido: {t2 > t3} - esperado: False")
+print(f"Resultado obtido: {t3 < t4} - esperado: True")
+print(f"Resultado obtido: {t2 > t4} - esperado: False")
+print(f"Resultado obtido: {t2 > None} - esperado: False")
