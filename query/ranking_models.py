@@ -134,6 +134,36 @@ class VectorRankingModel(RankingModel):
         docs_occur_per_term: Mapping[str, List[TermOccurrence]],
     ):
         documents_weight = {}
+        query_words = list(query.keys())
+        documents_ids = set()
+        for docList in docs_occur_per_term.values():
+            documents_ids.update([doc.doc_id for doc in docList])
 
+        for doc_id in documents_ids:
+            accumulator = 0
+            for query_word in query_words:
+                try:
+                    term_freq_on_doc = next(
+                        x.term_freq
+                        for x in docs_occur_per_term[query_word]
+                        if x.doc_id == doc_id
+                    )
+                except:
+                    term_freq_on_doc = 1
+
+                tfidf_query = VectorRankingModel.tf_idf(
+                    len(documents_ids)+1,
+                    query[query_word].term_freq,
+                    len(docs_occur_per_term[query_word]),
+                )
+                tfidf_doc = VectorRankingModel.tf_idf(
+                    len(documents_ids),
+                    term_freq_on_doc,
+                    len(docs_occur_per_term[query_word]),
+                )
+
+                accumulator += tfidf_doc * tfidf_query
+            accumulator /= self.idx_pre_comp_vals.document_norm[doc_id]
+            documents_weight[doc_id] = accumulator
         # retona a lista de doc ids ordenados de acordo com o TF IDF
         return self.rank_document_ids(documents_weight), documents_weight
