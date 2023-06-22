@@ -149,15 +149,15 @@ class VectorRankingModel(RankingModel):
                         if x.doc_id == doc_id
                     )
                 except:
-                    term_freq_on_doc = 1
+                    term_freq_on_doc = 0.5
 
                 tfidf_query = VectorRankingModel.tf_idf(
-                    len(documents_ids)+1,
+                    max(documents_ids),
                     query[query_word].term_freq,
                     len(docs_occur_per_term[query_word]),
                 )
                 tfidf_doc = VectorRankingModel.tf_idf(
-                    len(documents_ids),
+                    max(documents_ids),
                     term_freq_on_doc,
                     len(docs_occur_per_term[query_word]),
                 )
